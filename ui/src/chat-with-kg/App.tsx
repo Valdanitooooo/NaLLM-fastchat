@@ -78,6 +78,7 @@ function App() {
   const showContent = serverAvailable && !needsApiKeyLoading;
 
   function loadSampleQuestions() {
+    return false;
     const body = {
       api_key: apiKey,
     };
