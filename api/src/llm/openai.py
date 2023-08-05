@@ -15,11 +15,13 @@ class OpenAIChat(BaseLLM):
     def __init__(
         self,
         openai_api_key: str,
+        openai_api_base: str = "https://api.openai.com/v1",
         model_name: str = "gpt-3.5-turbo",
         max_tokens: int = 1000,
         temperature: float = 0.0,
     ) -> None:
         openai.api_key = openai_api_key
+        openai.api_base = openai_api_base
         self.model = model_name
         self.max_tokens = max_tokens
         self.temperature = temperature

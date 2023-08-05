@@ -50,6 +50,8 @@ neo4j_connection = Neo4jDatabase(
 
 # Initialize LLM modules
 openai_api_key = os.environ.get("OPENAI_API_KEY", None)
+openai_api_base = os.environ.get("OPENAI_API_BASE", None)
+openai_api_model = os.environ.get("OPENAI_API_MODEL", None)
 
 
 # Define FastAPI endpoint
@@ -81,7 +83,8 @@ async def questionProposalsForCurrentDb(payload: questionProposalPayload):
         database=neo4j_connection,
         llm=OpenAIChat(
             openai_api_key=api_key,
-            model_name="gpt-3.5-turbo-0613",
+            openai_api_base=openai_api_base,
+            model_name=openai_api_model,
             max_tokens=512,
             temperature=0.8,
         ),
@@ -130,12 +133,14 @@ async def websocket_endpoint(websocket: WebSocket):
 
             default_llm = OpenAIChat(
                 openai_api_key=api_key,
-                model_name=data.get("model_name", "gpt-3.5-turbo-0613"),
+                openai_api_base=openai_api_base,
+                model_name=data.get("model_name", openai_api_model),
             )
             summarize_results = SummarizeCypherResult(
                 llm=OpenAIChat(
                     openai_api_key=api_key,
-                    model_name="gpt-3.5-turbo-0613",
+                    openai_api_base=openai_api_base,
+                    model_name=openai_api_model,
                     max_tokens=128,
                 )
             )
@@ -206,7 +211,7 @@ async def root(payload: ImportPayload):
         result = ""
 
         llm = OpenAIChat(
-            openai_api_key=api_key, model_name="gpt-3.5-turbo-16k", max_tokens=4000
+            openai_api_key=api_key, openai_api_base=openai_api_base, model_name=openai_api_model, max_tokens=4000
         )
 
         if not payload.neo4j_schema:
@@ -248,7 +253,8 @@ async def companyInformation(payload: companyReportPayload):
 
     llm = OpenAIChat(
         openai_api_key=api_key,
-        model_name="gpt-3.5-turbo-16k-0613",
+        openai_api_base=openai_api_base,
+        model_name=openai_api_model,
         max_tokens=512,
     )
     print("Running company report for " + payload.company)
