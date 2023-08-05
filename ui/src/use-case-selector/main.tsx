@@ -36,6 +36,12 @@ root.render(
         >
           Report generator
         </a>
+        <a
+          href="use-cases/graph-and-chat/index.html"
+          className="ndl-btn ndl-large ndl-filled ndl-primary n-bg-palette-primary-bg-strong"
+        >
+          Graph
+        </a>
       </div>
     </div>
   </React.StrictMode>

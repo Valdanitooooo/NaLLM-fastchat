@@ -262,7 +262,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col min-w-[800px] min-h-[100vh] bg-palette-neutral-bg-strong">
+    <div className="flex flex-col min-w-[300px] min-h-[100vh] bg-palette-neutral-bg-strong">
       {needsApiKey && (
         <div className="flex justify-end mr-4">
           <button onClick={openModal}>API Key</button>
@@ -274,7 +274,7 @@ function App() {
             <option value="gpt-4">gpt-4</option>
         </select>
         </div>
-      <div className="p-6 mx-auto mt-20 rounded-lg bg-palette-neutral-bg-weak min-h-[6rem] min-w-[18rem] max-w-4xl ">
+      <div className="p-6 mx-auto mt-20 rounded-lg bg-palette-neutral-bg-weak min-h-[6rem] w-11/12 max-w-4xl ">
         {!serverAvailable && (
           <div>Server is unavailable, please reload the page to try again.</div>
         )}

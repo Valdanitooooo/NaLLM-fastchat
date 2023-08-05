@@ -20,6 +20,7 @@ class OpenAIChat(BaseLLM):
         temperature: float = 0.0,
     ) -> None:
         openai.api_key = openai_api_key
+        # openai.api_base = 'http://openaigw.uk/v1'
         self.model = model_name
         self.max_tokens = max_tokens
         self.temperature = temperature

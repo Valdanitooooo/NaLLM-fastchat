@@ -1,0 +1,19 @@
+.msgCont {
+  padding: 6px 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.08);
+  max-width: 90%;
+  min-width: 50%;
+  border-radius: 2px;
+}
+.msglist {
+  height: calc((100vh - 180px));
+  overflow: auto;
+  padding: 16px;
+}
+.msgBox {
+  border-bottom: 1px solid #eaebec;
+  padding: 24px 0;
+}
+.msgBox:last-child {
+  border-bottom: 0;
+}
