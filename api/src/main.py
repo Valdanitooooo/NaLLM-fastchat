@@ -2,7 +2,8 @@ import os
 from typing import Optional
 from components.company_report import CompanyReport
 
-from components.data_disambiguation import DataDisambiguation
+#from components.data_disambiguation import DataDisambiguation
+from components.data_disambiguation_ckg import DataDisambiguation
 from components.question_proposal_generator import (
     QuestionProposalGenerator,
 )
@@ -16,7 +17,8 @@ from driver.neo4j import Neo4jDatabase
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from fewshot_examples import get_fewshot_examples
+#from fewshot_examples import get_fewshot_examples
+from fewshot_examples_ckg import get_fewshot_examples
 from llm.openai import OpenAIChat
 from pydantic import BaseModel
 
