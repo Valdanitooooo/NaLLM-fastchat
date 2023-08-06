@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, ChangeEvent } from "react";
+import { useCallback, useEffect, useState, ChangeEvent, FC } from "react";
 import ChatContainer from "./ChatContainer";
 import type { ChatMessageObject } from "./ChatMessage";
 import ChatInput from "./ChatInput";
@@ -58,7 +58,7 @@ function stripQuestionPrefix(question: string): string {
   return question;
 }
 
-function App() {
+const App:FC<{updateData?: any}> = ({updateData}) => {
   const [serverAvailable, setServerAvailable] = useState(true);
   const [needsApiKeyLoading, setNeedsApiKeyLoading] = useState(true);
   const [needsApiKey, setNeedsApiKey] = useState(true);
@@ -197,6 +197,7 @@ function App() {
         ];
       });
       setConversationState("ready");
+      updateData && updateData(websocketResponse.data)
     }
   }, [lastMessage]);
 

@@ -15,6 +15,7 @@ export type WebSocketResponse =
       type: "end";
       output: string;
       generated_cypher: string | null;
+      data?: any;
     }
   | {
       type: "error";
