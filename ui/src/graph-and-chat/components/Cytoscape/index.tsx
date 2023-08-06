@@ -78,7 +78,7 @@ const formatData = (d: any[]) => {
           nodes.push({
             data: {
               id: identity,
-              label: name,
+              title: name,
               color: colors[nodeKeys.length - 1],
               ...rest,
             },
@@ -90,7 +90,7 @@ const formatData = (d: any[]) => {
           nodes.push({
             data: {
               id: identity,
-              label: name,
+              title: name,
               color: colors[keyIndex],
               ...rest,
             },
