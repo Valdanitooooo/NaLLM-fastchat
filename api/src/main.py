@@ -188,6 +188,7 @@ async def websocket_endpoint(websocket: WebSocket):
                             "type": "end",
                             "output": output,
                             "generated_cypher": results["generated_cypher"],
+                            "data": results["output"]
                         }
                     )
                 except Exception as e:
