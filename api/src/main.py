@@ -19,7 +19,9 @@ from fastapi.responses import JSONResponse
 from fewshot_examples import get_fewshot_examples
 from llm.openai import OpenAIChat
 from pydantic import BaseModel
+from dotenv import load_dotenv
 
+load_dotenv('../../.env')
 
 class Payload(BaseModel):
     question: str

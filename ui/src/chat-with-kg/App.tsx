@@ -73,7 +73,7 @@ function App() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [apiKey, setApiKey] = useState(loadKeyFromStorage() || "");
   const [sampleQuestions, setSampleQuestions] = useState<string[]>([]);
-  const [text2cypherModel, setText2cypherModel] = useState<string>("gpt-3.5-turbo-0613");
+  const [text2cypherModel, setText2cypherModel] = useState<string>("gpt-3.5-turbo");
 
   const showContent = serverAvailable && !needsApiKeyLoading;
 
@@ -271,7 +271,7 @@ function App() {
       )}
         <div className="flex justify-end mr-4">
         <select value={text2cypherModel} onChange={handleModelChange}>
-            <option value="gpt-3.5-turbo-0613">gpt-3.5-turbo</option>
+            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
             <option value="gpt-4">gpt-4</option>
         </select>
         </div>

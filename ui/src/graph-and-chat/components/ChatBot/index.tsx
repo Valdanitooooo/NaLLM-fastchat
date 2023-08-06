@@ -75,7 +75,7 @@ const Chat: FC = () => {
   const [keyword, setKeyword] = useState('');
   const [msgs, setMsgs] = useState<IMsgData[]>([]);
   const [sampleQuestions, setSampleQuestions] = useState<string[]>([]);
-  const [text2cypherModel, setText2cypherModel] = useState<string>("gpt-3.5-turbo-0613");
+  const [text2cypherModel, setText2cypherModel] = useState<string>("gpt-3.5-turbo");
 
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(URI, {
     shouldReconnect: () => true,
