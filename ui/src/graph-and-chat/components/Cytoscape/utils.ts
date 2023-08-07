@@ -80,7 +80,7 @@ export const initStylesheet: any = [
       'target-arrow-shape':(ele: any) => getPropertyValue(ele, 'arrow', 'triangle'),
       width: 1,
       'font-size': '10px',
-      // label: (ele: any) => getPropertyValue(ele, 'title', '-'),
+      label: (ele: any) => getPropertyValue(ele, 'title', '-'),
       color: (ele: any) => getPropertyValue(ele, 'color', EDGE_COLOR),
       'line-color': (ele: any) => getPropertyValue(ele, 'color', EDGE_COLOR),
       'text-background-color': 'green', // (ele: any) => getPropertyValue(ele, 'color', EDGE_COLOR),
