@@ -8,7 +8,7 @@ const App = () => {
   const [graphData, setGraphData] = useState();
   return (
     <Row>
-      <Col flex={1}>
+      <Col style={{width: '50%'}}>
         <Cytoscape dataSource={graphData} />
       </Col>
       <Col style={{width: '50%'}}>

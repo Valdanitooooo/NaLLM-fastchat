@@ -1,4 +1,5 @@
-import React, { useEffect, FC, useState } from "react";
+import React, { useEffect, FC, useState, useCallback } from "react";
+import { Empty, Descriptions, DescriptionsProps } from 'antd'
 import CytoscapeComponent from "react-cytoscapejs";
 import Cytoscapejs from "cytoscape";
 import fcose from "cytoscape-fcose";
@@ -131,14 +132,15 @@ const formatData = (d: any[]) => {
       });
     }
     for (let i = 0; i < relationships.length; i += 1) {
-      const {id, properties, start_node, end_node} = relationships[i];
-      edgesAfterFormat.push({ data: { source: start_node, target: end_node, title: properties?.name || '' } });
+      const {id, properties, start_node, end_node, type} = relationships[i];
+      edgesAfterFormat.push({ data: { source: start_node, target: end_node, title: properties?.name || '', data: {id, ...properties, type} } });
     }
   } catch (error) {
     console.error('FORMAT GRAPH DATA ERROR:', error)
   }
 
-  return [...nodesAfterFormat, ...edgesAfterFormat];
+  const result = [...nodesAfterFormat, ...edgesAfterFormat];
+  return result;
 };
 
 interface ICytoscapeCompProps {
@@ -146,20 +148,71 @@ interface ICytoscapeCompProps {
 }
 const CytoscapeComp: FC<ICytoscapeCompProps> = ({ dataSource }) => {
   const [graphData, setGraphData] = useState<any[]>([]);
+  const [cy, setCy] = useState<any>();
+  const [detail, setDetail] = useState<any>();
   useEffect(() => {
     if (dataSource) {
       setGraphData(formatData(dataSource));
     }
   }, [dataSource]);
+  useEffect(() => {
+    if (cy) {
+      cy.layout(fcoseBilkentOptions).run();
+    }
+  },[graphData])
+  useEffect(() => {
+    if (cy) {
+      cy.on('click', (e) => {
+        if (e.target.isNode && e.target.isNode()) {
+          e.target.select();
+          const {id, labels, properties} = e.target.data('data');
+          const data = {id, labels, ...properties};
+          console.log('Node::', data)
+          setDetail(data)
+        }
+        if (e.target.isEdge && e.target.isEdge()) {
+          e.target.select();
+          const {id, type, ...rest} = e.target.data('data');
+          const data = {id, type, ...rest};
+          console.log('Edge::', data)
+          setDetail(data)
+        }
+      })
+    }
+  }, [cy])
+  const formatDetail = useCallback(()=> {
+    const items: DescriptionsProps['items'] = [];
+    try {
+      for (const item in detail) {
+        items.push({
+          key: item,
+          label: item,
+          children: <div>{detail[item]}</div>
+        })
+      }
+      return <Descriptions style={{height: '45vh', overflow: 'auto'}} title={detail.name} column={1} items={items} />
+    } catch (error) {
+      console.log('格式化错误：', error)
+      return <div>{detail ? JSON.stringify(detail) : 'undefined'}</div>
+    }
+  }, [detail])
   return (
-    <CytoscapeComponent
-      elements={graphData}
-      style={{ height: "100vh" }}
-      layout={fcoseBilkentOptions}
-      minZoom={0.5}
-      maxZoom={2}
-      stylesheet={initStylesheet}
-    />
+    <div>
+      <CytoscapeComponent
+        elements={graphData}
+        style={{ height: "50vh" }}
+        layout={fcoseBilkentOptions}
+        minZoom={0.5}
+        maxZoom={2}
+        stylesheet={initStylesheet}
+        cy={c => setCy(c)}
+      />
+      <div style={{borderTop: '1px solid #ddd', padding: 16}}>
+        {
+          detail? formatDetail() : <Empty style={{paddingTop: 40}} description="点击元素查看信息" />
+        }
+      </div>
+    </div>
   );
 };
 
