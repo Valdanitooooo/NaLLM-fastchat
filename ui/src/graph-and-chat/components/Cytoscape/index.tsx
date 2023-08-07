@@ -7,17 +7,17 @@ import { fcoseBilkentOptions, initStylesheet } from "./utils";
 
 Cytoscapejs.use(fcose);
 const colors = [
-  "magenta",
-  "red",
-  "volcano",
-  "orange",
-  "gold",
-  "lime",
-  "green",
-  "cyan",
-  "blue",
-  "geekblue",
-  "purple",
+  "#c41d7f",
+  "#389e0d",
+  "#cf1322",
+  "#08979c",
+  "#d4380d",
+  "#d46b08",
+  "#d48806",
+  "#7cb305",
+  "#0958d9",
+  "#1d39c4",
+  "#531dab",
 ];
 const mockData = {
   "type": "end",
@@ -122,11 +122,12 @@ const formatData = (d: any[]) => {
 
     for (let i = 0; i < nodes.length; i += 1) {
       const {id, properties} = nodes[i];
+      const color = colors[i%colors.length];
       nodesAfterFormat.push({
         data: {
           id,
           title: properties?.name || '未命名',
-          color: colors[i - 1],
+          color,
           data: nodes[i],
         },
       });
@@ -151,10 +152,10 @@ const CytoscapeComp: FC<ICytoscapeCompProps> = ({ dataSource }) => {
   const [cy, setCy] = useState<any>();
   const [detail, setDetail] = useState<any>();
   useEffect(() => {
-    if (dataSource) {
-      setGraphData(formatData(dataSource));
+    if (true) {
+      setGraphData(formatData(mockData.data));
     }
-  }, [dataSource]);
+  }, []);
   useEffect(() => {
     if (cy) {
       cy.layout(fcoseBilkentOptions).run();
@@ -164,22 +165,45 @@ const CytoscapeComp: FC<ICytoscapeCompProps> = ({ dataSource }) => {
     if (cy) {
       cy.on('click', (e) => {
         if (e.target.isNode && e.target.isNode()) {
-          e.target.select();
+          // e.target.select();
           const {id, labels, properties} = e.target.data('data');
           const data = {id, labels, ...properties};
-          console.log('Node::', data)
-          setDetail(data)
-        }
-        if (e.target.isEdge && e.target.isEdge()) {
-          e.target.select();
+          console.log('Node::', data);
+          setDetail(data);
+          selectConnection({id, type: 'node', data})
+        } else if (e.target.isEdge && e.target.isEdge()) {
+          // e.target.select();
+          console.log('>>', e.target)
           const {id, type, ...rest} = e.target.data('data');
           const data = {id, type, ...rest};
-          console.log('Edge::', data)
-          setDetail(data)
+          console.log('Edge::', data);
+          setDetail(data);
+          // selectConnection({id, type: 'edge', data, source: e.target.data('source'), target: e.target.data('target')})
         }
       })
     }
-  }, [cy])
+  }, [cy]);
+  
+  const selectConnection = (item: any) => {
+    setTimeout(() => {
+      if (item.type === 'edge') {
+        const { target, source } = item;
+        cy.$(`#${source},#${target}`).select()
+      }
+      if (item.type === 'node') {
+        cy.edges().forEach(e => {
+          const targetId = e.data('target'), sourceId = e.data('source');
+          if (targetId === `${item.id}`) {
+            cy.$(`#${sourceId}`).select()
+          }
+          if (sourceId === `${item.id}`) {
+            cy.$(`#${targetId}`).select()
+          }
+        })
+      }
+    }, 0)
+  };
+
   const formatDetail = useCallback(()=> {
     const items: DescriptionsProps['items'] = [];
     try {
@@ -197,7 +221,7 @@ const CytoscapeComp: FC<ICytoscapeCompProps> = ({ dataSource }) => {
     }
   }, [detail])
   return (
-    <div>
+    <div style={{position: 'relative'}}>
       <CytoscapeComponent
         elements={graphData}
         style={{ height: "50vh" }}
@@ -207,11 +231,14 @@ const CytoscapeComp: FC<ICytoscapeCompProps> = ({ dataSource }) => {
         stylesheet={initStylesheet}
         cy={c => setCy(c)}
       />
-      <div style={{borderTop: '1px solid #ddd', padding: 16}}>
-        {
-          detail? formatDetail() : <Empty style={{paddingTop: 40}} description="点击元素查看信息" />
-        }
-      </div>
+      {
+        graphData.length ? detail ? (
+          <div style={{borderTop: '1px solid #ddd', padding: 16}}>
+            {formatDetail()}
+          </div>
+        ) : <Empty style={{paddingTop: 40}} description="点击元素查看详细信息" /> :
+        <div style={{width: '100%', position: "absolute"}}><Empty style={{top: 40}} description="暂无数据" /></div>
+      }
     </div>
   );
 };
