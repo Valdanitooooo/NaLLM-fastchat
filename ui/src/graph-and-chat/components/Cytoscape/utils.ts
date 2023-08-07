@@ -29,7 +29,7 @@ export const initStylesheet: any = [
       label: (ele: any) => getPropertyValue(ele, 'title', '-'),
       color: (ele: any) => getPropertyValue(ele, 'color', EDGE_COLOR),
       'background-image': (ele: any) => getPropertyValue(ele, 'icon', 'question-circle'),
-      'background-color': (ele: any) => getPropertyValue(ele, 'bcolor', EDGE_COLOR),
+      'background-color': (ele: any) => getPropertyValue(ele, 'color', EDGE_COLOR),
       'text-outline-width': 2,
       'text-margin-y': 4,
       'text-outline-color': '#fff',

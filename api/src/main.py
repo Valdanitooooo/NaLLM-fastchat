@@ -14,6 +14,7 @@ from components.unstructured_data_extractor import (
     DataExtractorWithSchema,
 )
 from driver.neo4j import Neo4jDatabase
+from data_util import get_json_data
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -185,11 +186,15 @@ async def websocket_endpoint(websocket: WebSocket):
                         callback=onToken,
                     )
                     chatHistory.append({"role": "system", "content": output})
+                    cypher_ql = results["generated_cypher"].replace("cypher", "")
+                    if cypher_ql:
+                        data = get_json_data(cypher_ql)
                     await websocket.send_json(
                         {
                             "type": "end",
                             "output": output,
                             "generated_cypher": results["generated_cypher"],
+                            "data": data
                         }
                     )
                 except Exception as e:

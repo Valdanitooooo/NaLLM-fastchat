@@ -1,10 +1,12 @@
 def get_fewshot_examples(openai_api_key):
     return f"""
-#肺放线菌病是什么病?
-MATCH (d:Disease {{name: "肺放线菌病"}}) RETURN d.desc LIMIT 10
+#肺放线菌病是什么病？
+MATCH (d:Disease {{name: "肺放线菌病"}}) RETURN d
+#药物过敏能吃什么药品？
+MATCH (d:Disease {{name: "药物过敏"}})-[:common_drug]->(drug:Drug) RETURN d,drug
 #苯中毒是由什么原因引起的，该如何预防？
-MATCH (d:Disease {{name:"苯中毒"}}) RETURN d.cause, d.prevent
-#喘息样支气管炎由什么症状，有什么并发症
+MATCH (d:Disease {{name:"苯中毒"}}) RETURN d
+#喘息样支气管炎有什么症状，有什么并发症吗？
 MATCH (n:Disease {{name: '喘息样支气管炎'}})-[:acompany_with]->(d:Disease),
 (n)-[:has_symptom]-(s:Symptom)
 return n, d, s
